@@ -1,7 +1,8 @@
 <?php
     $firstname = $name = $phone = $message = $email = "";
     $firstname_error = $name_error = $phone_error = $message_error = $email_error = "";
-    
+    $isSuccess = false;
+
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
         //security check on post $var
@@ -10,26 +11,36 @@
         $phone = verifyInput($_POST['phone']);
         $message = verifyInput($_POST['message']);
         $email = verifyInput($_POST['email']);
+        $isSuccess = true;
         
         if(empty($firstname))
         {
             $firstname_error = "Le prénom est requis.";
+            $isSuccess = false;
         }
         if(empty($name))
         {
             $name_error = "Le nom est requis.";
+            $isSuccess = false;
         }
         if(empty($message))
         {
             $message_error = "Pas de message pas de chocolat!";
+            $isSuccess = false;
         }
         if(!isEmail($email))
         {
             $email_error = "Ca ressemble bof bof à un email ça!";
+            $isSuccess = false;
         }
         if(!isPhone($phone))
         {
             $phone_error = "Entrez un numéro avec seulement chiffres et espaces.";
+            $isSuccess = false;
+        }
+        if($isSuccess)
+        {
+            //sendEmail with all the datas
         }
 
         
@@ -60,10 +71,10 @@
     <head>
         <title>Contactez-moi !</title>
         <meta charset="utf-8" />
-        <meta name="viewport" content="device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <!-- JQuery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
@@ -83,6 +94,7 @@
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1">
                     <form id="contact-form" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" role="form">
+                        <div class="row">
                         <div class="col-md-6">
                             <label for="firstname">Prénom<span class="blue"> *</span></label>
                             <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Votre prénom" value="<?php echo $firstname ;?>" >
@@ -106,7 +118,7 @@
                         <div class="col-md-12">
                             <label for="message">Message<span class="blue"> *</span></label>
                             <textarea id="message" name="message" class="form-control" placeholder="Votre message" rows="4" ><?php echo $message; ?>
-                            </textarea > 
+                            </textarea> 
                             <p class="comments"><?php echo $message_error; ?></p>
                         </div>
                         <div class="col-md-12">
@@ -115,8 +127,8 @@
                         <div class="col-md-12">
                             <input type="submit" class="button1" value="Envoyer">
                         </div>
-                        
-                        <p class="thank-you">Votre message a bien été envoyé. Merci de m'avoir contacté :) </p>
+                    </div>
+                        <p class="thank-you" style="display:<?php  if($isSuccess) echo 'block' ; else echo 'none'; ?>">Votre message a bien été envoyé. Merci de m'avoir contacté :) </p>
                     </form>
                 </div>
             </div>

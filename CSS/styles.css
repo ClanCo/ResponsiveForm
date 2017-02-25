@@ -55,7 +55,7 @@ h2
 
 #contact-form input[type=submit]
 {
-    margin: 40px auto 20px ;
+    margin: 40px auto 0px;
     display: block;
 }
 .button1
@@ -76,6 +76,7 @@ h2
     background: #333;
     border-color: #ffa500;
 }
+
 .thank-you
 {
     text-align: center;
