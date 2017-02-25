@@ -3,6 +3,9 @@
     $firstname_error = $name_error = $phone_error = $message_error = $email_error = "";
     $isSuccess = false;
 
+    //email $variable :
+    $emailTo = "corentin.terrie@gmail.com";
+
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
         //security check on post $var
@@ -13,34 +16,67 @@
         $email = verifyInput($_POST['email']);
         $isSuccess = true;
         
+        //email $variable :
+        $emailText = "";
+        
+        
         if(empty($firstname))
         {
             $firstname_error = "Le prénom est requis.";
             $isSuccess = false;
+        } 
+        else
+        {
+            $emailText .= "FirstName: $firstname \n";    
         }
+        
         if(empty($name))
         {
             $name_error = "Le nom est requis.";
             $isSuccess = false;
         }
-        if(empty($message))
+        else
         {
-            $message_error = "Pas de message pas de chocolat!";
-            $isSuccess = false;
+            $emailText .= "Name: $name \n";    
         }
+        
         if(!isEmail($email))
         {
             $email_error = "Ca ressemble bof bof à un email ça!";
             $isSuccess = false;
         }
+        else
+        {
+            $emailText .= "Email: $email \n";    
+        }
+        
         if(!isPhone($phone))
         {
             $phone_error = "Entrez un numéro avec seulement chiffres et espaces.";
             $isSuccess = false;
         }
+        else
+        {
+            $emailText .= "Phone: $phone \n";    
+        }
+        
+        if(empty($message))
+        {
+            $message_error = "Pas de message pas de chocolat!";
+            $isSuccess = false;
+        }
+        else
+        {
+            $emailText .= "Message: $message \n";    
+        }
+        
+        
+        /* All the data are successful so we can send the email */
         if($isSuccess)
         {
-            //sendEmail with all the datas
+            $headers = "From : $firstname $name <$email> \r\nReply-To: $email";
+            mail($emailTo, "Message from : ", $emailText, $headers);
+            $firstname = $name = $phone = $message = $email = "";
         }
 
         
