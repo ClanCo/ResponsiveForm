@@ -2,11 +2,19 @@
     $firstname = $name = $phone = $message = $email = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        $firstname = $_POST['firstname'];
-        $name = $_POST['name'];
-        $phone = $_POST['phone'];
-        $message = $_POST['message'];
-        $email = $_POST['email'];
+        $firstname = verifyInput($_POST['firstname']);
+        $name = verifyInput($_POST['name']);
+        $phone = verifyInput($_POST['phone']);
+        $message = verifyInput($_POST['message']);
+        $email = verifyInput($_POST['email']);
+    }
+
+    function verifyInput($var)
+    {
+        $var = trim($var); // remove all supp chars
+        $var = stripslashes($var); // remove all /
+        $var = htmlspecialchars($var); // create a string of script and join them to html request
+        return $var;
     }
  
 ?>
@@ -39,7 +47,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1">
-                    <form id="contact-form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" role="form">
+                    <form id="contact-form" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" role="form">
                         <div class="col-md-6">
                             <label for="firstname">Prénom<span class="blue"> *</span></label>
                             <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Votre prénom" value="<?php echo $firstname ;?>">
@@ -62,7 +70,7 @@
                         </div>
                         <div class="col-md-12">
                             <label for="message">Message<span class="blue"> *</span></label>
-                            <textarea id="message" name="message" class="form-control" placeholder="Votre message" rows="4"><?php echo htmlspecialchars($message);?>
+                            <textarea id="message" name="message" class="form-control" placeholder="Votre message" rows="4"><?php echo $message;?>
                             </textarea > 
                             <p class="comments">Message d'erreur</p>
                         </div>
